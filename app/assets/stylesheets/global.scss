@@ -1,0 +1,16 @@
+@import 'vars';
+@import 'fonts';
+
+*, *:before, *:after {
+	box-sizing: border-box;
+	font-family: inherit;
+}
+
+html {
+	font-size: 1.125em;
+}
+
+body {
+	margin: 0;
+	font-family: "Aalto Sans", sans-serif;
+}

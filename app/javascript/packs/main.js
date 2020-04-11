@@ -6,15 +6,25 @@
 // All it does is render <div>Hello Vue</div> at the bottom of the page.
 
 import Vue from 'vue'
-import App from '../app.vue'
+import App from './vue/App.vue'
+import SampleApp from './vue/Sample.vue'
 
 document.addEventListener('DOMContentLoaded', () => {
+  const appLocation = document.querySelector('#app')
   const app = new Vue({
     render: h => h(App)
-  }).$mount()
-  document.body.appendChild(app.$el)
+  })
+  if (appLocation) {
+    app.$mount(appLocation)
+  }
 
-  console.log(app)
+  const sampleLocation = document.querySelector('#sample')
+  const sample = new Vue({
+    render: h => h(SampleApp)
+  })
+  if (sampleLocation) {
+    sample.$mount(sampleLocation)
+  }
 })
 
 
