@@ -1,6 +1,7 @@
 <template>
 	<header>
-		<Button :click="newGame">New Game</Button>
+		<a href="/">Back to Game list</a>
+		<h1>{{ gameTitle }} </h1>
 		<Button :click="itWorks">Add team</Button>
 	</header>
 </template>
@@ -13,6 +14,12 @@ export default {
 	name: 'Header',
 	components: {
 		Button
+	},
+	props: {
+		gameTitle: {
+			type: String,
+			required: true
+		}
 	},
 	methods: {
 		itWorks() {
@@ -35,5 +42,9 @@ export default {
 		justify-content: space-between;
 		background: $lightBlue;
 		padding: 12px;
+
+		h1 {
+			margin: 0;
+		}
 	}
 </style>
