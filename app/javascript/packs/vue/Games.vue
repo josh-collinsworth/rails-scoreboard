@@ -8,6 +8,7 @@
 					<h2>{{ game.name }}</h2>
 				</a>
 				<p class="details">Last updated {{ parseDate(game.updated_at) }}</p>
+				<p><small>{{game.options.increment}}</small></p>
 			</li>
 		</ul>
 	</div>
@@ -24,7 +25,6 @@ export default {
 	mounted() {
 		axios.get('/api/games').then(response => {
 			this.gamesList = response.data
-			console.log(response.data)
 		})
 	},
 	methods: {

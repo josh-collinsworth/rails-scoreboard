@@ -1,32 +1,34 @@
 <template>
 	<header>
 		<a href="/">Back to Game list</a>
-		<h1>{{ gameTitle }} </h1>
-		<Button :click="itWorks">Add team</Button>
+		<h1>{{ game.name }} </h1>
+		<Button :click="toggleOptions">Menu</Button>
+		<Options :menuOpen="menuOpen" :game="game" />
 	</header>
 </template>
 
 
 <script>
 import Button from './Button'
+import Options from './Options'
 
 export default {
 	name: 'Header',
+	data: () => ({
+		menuOpen: false
+	}),
 	components: {
-		Button
+		Button, Options
 	},
 	props: {
-		gameTitle: {
-			type: String,
+		game: {
+			type: Object,
 			required: true
 		}
 	},
 	methods: {
-		itWorks() {
-			console.log('It works!');
-		},
-		newGame() {
-			console.log('NEW GAME (COME BACK TO ME LATER)')
+		toggleOptions() {
+			this.menuOpen = !this.menuOpen;
 		}
 	}
 }
@@ -41,7 +43,8 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		background: $lightBlue;
-		padding: 12px;
+		padding: .75rem;
+		height: 4rem;
 
 		h1 {
 			margin: 0;

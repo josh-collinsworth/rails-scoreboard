@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header :game-title="game.name" />
-    <p>{{ message }}<strong> SUCKAS</strong></p>
+    <Header :game="game" />
+
   </div>
 </template>
 
@@ -17,7 +17,6 @@ export default {
   components: { Header },
   mounted() {
     const id = window.location.href.match(/game\/(\d+)/).pop()
-    console.log(`/api/games/${id}`)
     axios.get(`/api/games/${id}`)
       .then(response => this.game = response.data)
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_11_153257) do
+ActiveRecord::Schema.define(version: 2020_04_11_211233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,27 @@ ActiveRecord::Schema.define(version: 2020_04_11_153257) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "options", default: "{}"
     t.index ["name"], name: "index_games_on_name"
   end
 
+  create_table "participants", force: :cascade do |t|
+    t.string "name"
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_participants_on_name"
+  end
+
+  create_table "participants_in_games", force: :cascade do |t|
+    t.bigint "games_id", null: false
+    t.bigint "participants_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["games_id"], name: "index_participants_in_games_on_games_id"
+    t.index ["participants_id"], name: "index_participants_in_games_on_participants_id"
+  end
+
+  add_foreign_key "participants_in_games", "games", column: "games_id"
+  add_foreign_key "participants_in_games", "participants", column: "participants_id"
 end
