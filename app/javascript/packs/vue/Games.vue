@@ -1,30 +1,42 @@
 <template>
 	<div class="container">
-    <h1>Games</h1>
+		<transition name="fade">
+			<div v-if="loading" key="isLoading">
+				<Loader />
+			</div>
 
-		<ul id="games-list">
-			<li v-for="game in gamesList" :key="game.created_at">
-				<a :href="`/game/${game.id}`">
-					<h2>{{ game.name }}</h2>
-				</a>
-				<p class="details">Last updated {{ parseDate(game.updated_at) }}</p>
-				<p><small>{{game.options.increment}}</small></p>
-			</li>
-		</ul>
+			<div v-else key="isLoaded">
+				<h1>Resume a game in progress</h1>
+				<p>Or, <a href="/game/new">start a new game</a>!</p>
+				<ul id="games-list">
+					<li v-for="game in gamesList" :key="game.created_at">
+						<a :href="`/game/${game.id}`">
+							<h2>{{ game.name }}</h2>
+						</a>
+						<p class="details">Last played: {{ parseDate(game.updated_at) }}</p>
+						<p><small>{{game.options.increment}}</small></p>
+					</li>
+				</ul>
+			</div>
+		</transition>
 	</div>
 </template>
 
 
 <script>
 import axios from 'axios'
+import Loader from './components/Loader'
 
 export default {
 	data: () => ({
-		gamesList: []
+		gamesList: [],
+		loading: true
 	}),
+	components: { Loader },
 	mounted() {
 		axios.get('/api/games').then(response => {
 			this.gamesList = response.data
+			setTimeout(() => { this.loading = false }, 200)
 		})
 	},
 	methods: {
@@ -56,6 +68,5 @@ export default {
 				margin-top: 0;
 			}
 		}
-
 	}
 </style>

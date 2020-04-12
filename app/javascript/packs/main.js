@@ -7,7 +7,7 @@
 
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
-import Scoreboard from './vue/Scoreboard.vue'
+import Game from './vue/Game.vue'
 import Games from './vue/Games.vue'
 
 Vue.use(TurbolinksAdapter)
@@ -18,7 +18,7 @@ document.addEventListener('turbolinks:load', () => {
   const gamesEl = document.querySelector('#games')
 
   // Create the Vues
-  const scoreboard = new Vue({ render: h => h(Scoreboard) })
+  const scoreboard = new Vue({ render: h => h(Game) })
   const games = new Vue({ render: h => h(Games) })
 
   // Conditionally mount the Vues

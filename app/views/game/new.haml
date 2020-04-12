@@ -1,0 +1,10 @@
+.container
+	%h1 Start a New Game
+
+	#new-game
+		= form_for @game, url: game_index_path(@game) do |f|
+			.form-group.stacked
+				= f.label :name, "Give this game a name:"
+				= f.text_field :name, placeholder: "e.g., 'Mancala'"
+
+			= f.submit

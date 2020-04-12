@@ -1,1 +1,4 @@
+- if params[:deleted] == "true"
+	- flash.now[:notice] = "✅ Deleted game #{params[:name]}"
+
 #games

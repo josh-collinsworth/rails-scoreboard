@@ -1,5 +1,7 @@
 <template>
-	<h1>Loading…</h1>
+	<div id="loader">
+		<h1>Loading…</h1>
+	</div>
 </template>
 
 
@@ -10,6 +12,19 @@ export default {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../../assets/stylesheets/vars';
 
+	#loader {
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: $lightBlue;
+		top: 0;
+		left: 0;
+		color: $white;
+	}
 </style>

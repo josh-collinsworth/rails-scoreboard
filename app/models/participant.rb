@@ -1,3 +1,4 @@
 class Participant < ApplicationRecord
-	has_many :games, through: :participants_in_games
+	has_many :game_participants
+	has_many :games, through: :game_participants
 end
