@@ -21,7 +21,7 @@ class Api::GameParticipantsController < ApiController
 	end
 
 	def display_add_participant_error
-		flash.now[:alert] = "Error: could not add participant to game."
+		render json: { error: true }
 	end
 
 	def destroy
@@ -29,7 +29,7 @@ class Api::GameParticipantsController < ApiController
 		if @game_participant.destroy
 			render json: { success: true }
 		else
-			flash.now[:alert] = "Error: could not remove participant from game."
+			render json: { error: true }
 		end
 	end
 end

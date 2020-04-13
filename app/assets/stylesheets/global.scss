@@ -25,6 +25,11 @@ body {
 
 a {
 	color: $darkBlue;
+	transition: all .2s $easing;
+
+	&:hover {
+		color: $yellow;
+	}
 }
 
 .container {
@@ -90,6 +95,43 @@ button, input[type=submit] {
 	}
 }
 
+aside {
+
+	ul {
+		padding: 0;
+
+		li {
+			font-weight: bold;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px dotted $darkBlue;
+
+			&:first-of-type {
+				border-top: 1px dotted $darkBlue;
+			}
+
+			button {
+				background: $darkBlue;
+				color: $white;
+				padding: .25rem;
+				font-size: .875rem;
+				line-height: 1;
+				margin: .25rem;
+				font-weight: normal;
+				font-style: italic;
+				border-color: $darkBlue;
+
+				&:hover {
+					box-shadow: 0 0 0 2px $yellow;
+					border-color: $darkBlue;
+					color: $white;
+				}
+			}
+		}
+	}
+}
+
 label {
 	font-weight: bold;
 	font-style: italic
@@ -125,11 +167,14 @@ label {
 	5% {
 		opacity: 1;
 	}
-	95% {
+	94% {
 		opacity: 1;
+	}
+	99% {
+		opacity: 0;
 	}
 	100% {
 		opacity: 0;
-		pointer-events: none;
+		display: none;
 	}
 }

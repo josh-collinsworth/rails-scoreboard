@@ -1,13 +1,12 @@
 <template>
 	<header v-if="game">
 		<a href="/">Back to Game list</a>
-		<h1>{{ game.name }} </h1>
 		<div>
 			<button @click="togglePlayerMenu">Players</button>
 			<button @click="toggleOptionsMenu">Game Options</button>
 		</div>
-		<Players :player-menu-open="playerMenuOpen" :game="game" :refresh="refresh" :players="players" />
-		<Options :options-menu-open="optionsMenuOpen" :game="game" :refresh="refresh" />
+		<Players :player-menu-open="playerMenuOpen" :game="game" :refresh="refresh" :alert="alert" :players="players" />
+		<Options :options-menu-open="optionsMenuOpen" :game="game" :refresh="refresh" :alert="alert" />
 	</header>
 </template>
 
@@ -37,6 +36,10 @@ export default {
 		players: {
 			type: Array,
 			required: true
+		},
+		alert: {
+			type: Function,
+			required: true
 		}
 	},
 	methods: {
@@ -60,7 +63,8 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		background: $lightBlue;
+		background: $darkBlue;
+		color: $white;
 		padding: .75rem;
 		height: 4rem;
 		position: fixed;
@@ -73,7 +77,18 @@ export default {
 		}
 
 		button {
+			background: $lightBlue;
+			border-color: $darkGray;
+			color: $darkGray;
 			margin: 0 0 0 .5rem;
+
+			&:hover {
+				box-shadow: 0 0 0 2px $yellow;
+			}
+		}
+
+		a {
+			color: $lightBlue;
 		}
 	}
 </style>

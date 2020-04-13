@@ -1,4 +1,5 @@
 class Api::ParticipantsController < ApiController
+
 	def index
 		render json: Participant.all
 	end
@@ -8,7 +9,25 @@ class Api::ParticipantsController < ApiController
 		if @new_participant.save
 			render json: { success: true }
 		else
-			flash.now[:alert] = "Couldn't create a new player."
+			render json: { error: true }
+		end
+	end
+
+	def destroy
+		@participant = Participant.find(params[:id])
+		if @participant.destroy
+			render json: { success: true }
+		else
+			render json: { error: true }
+		end
+	end
+
+	def update
+		@participant = Participant.find(params[:id])
+		if @participant.update(score: params[:new_score])
+			render json: { success: true }
+		else
+			render json: { error: true }
 		end
 	end
 end

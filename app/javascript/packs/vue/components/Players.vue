@@ -1,27 +1,36 @@
 <template>
 	<aside v-if="game" id="players" :class="playerMenuOpen && 'open'" :tabindex="playerMenuOpen ? 0 : -1" :aria-hidden="!playerMenuOpen">
-		<h2>Current players:</h2>
+		<h2>Players in Game:</h2>
 		<ul>
 			<li v-for="player in players" :key="player.id">
 				{{ player.name }} - {{ player.score || 0 }}
-				<a href="#" :data-player-id="player.id" @click="removePlayerFromGame">Remove from game</a>
+				<button @click="removePlayerFromGame(player.id)">Remove from game</button>
 			</li>
 		</ul>
 
-		<h2>Add to game:</h2>
+		<h2>Other Players:</h2>
 		<ul>
 			<li v-for="player in getRemainingPlayers" :key="player.id">
-				<a href="#" :data-player-id="player.id" @click="addPlayerToGame">{{ player.name }}</a>
+				{{ player.name }}
+				<div>
+					<button @click="addPlayerToGame(player.id)">Add to game</button>
+					<button @click="deletePlayer(player.id)">Delete</button>
+				</div>
 			</li>
+		</ul>
+
+		<ul>
 			<li>
 				<form @submit="createNewPlayer">
-					<div class="form-group stacked">
+					<div class="form-group">
 						<label for="new-player">New player:</label>
 						<input id="new-player" v-model="newPlayerName" type="text" />
+						<button type="submit">Add</button>
 					</div>
 				</form>
 			</li>
 		</ul>
+
 	</aside>
 </template>
 
@@ -49,17 +58,22 @@ export default {
 		players: {
 			type: Array,
 			required: true
+		},
+		alert: {
+			type: Function,
+			required: true
 		}
 	},
 	mounted() {
-		axios
-			.get(`/api/participants`)
-			.then(response => this.allPlayers = response.data)
+		this.getAllPlayers()
 	},
 	methods: {
-		addPlayerToGame(e) {
-			e.preventDefault();
-			const playerID = e.target.dataset.playerId
+		getAllPlayers() {
+			axios
+				.get(`/api/participants`)
+				.then(response => this.allPlayers = response.data)
+		},
+		addPlayerToGame(playerID) {
 			const data = {
 				game_id: this.game.id,
 				participant_id: playerID
@@ -67,25 +81,41 @@ export default {
 			axios
 				.post(`/api/game_participants`, data)
 				.then(response => {
-					if (response.data.success) this.refresh()
+					if (response.data.success) {
+						this.refresh()
+					} else {
+						this.alert('Error: could not add player to game')
+					}
 				})
 		},
-		removePlayerFromGame(e) {
-			e.preventDefault();
-			const playerID = e.target.dataset.playerId
+		removePlayerFromGame(playerID) {
 			axios
 				.delete(`/api/game_participants/${this.game.id}?player_id=${playerID}`)
 				.then(response => {
-					if (response.data.success) this.refresh()
+										if (response.data.success) {
+						this.refresh()
+					} else {
+						this.alert('Error: could not remove player')
+					}
 				})
 		},
 		createNewPlayer(e) {
 			e.preventDefault();
 			axios
-				.post(`/api/participant/`, { name: this.newPlayerName })
-				.then(response => {
-					if (response.data.success) this.refresh()
-				})
+				.post(`/api/participants/`, { name: this.newPlayerName })
+				.then(response => this.validatePlayerResponse(response, "Unable to create new player"))
+		},
+		deletePlayer(playerID){
+			axios
+				.delete(`/api/participants/${playerID}`)
+				.then(response => this.validatePlayerResponse(response, "Unable to delete player"))
+		},
+		validatePlayerResponse(response, error) {
+			if(response.data.success) {
+				this.getAllPlayers()
+			} else {
+				this.alert(error)
+			}
 		}
 	},
 	computed: {
@@ -109,6 +139,7 @@ export default {
 		padding: 1rem;
 		min-height: calc(100vh - 100px);
 		background: $lightBlue;
+		color: $darkGray;
 		right: 0;
 		top: 4rem;
 		transform: translateX(100%);
@@ -116,6 +147,25 @@ export default {
 
 		&.open {
 			transform: translateX(0);
+		}
+
+		h2 {
+			margin: 0;
+		}
+
+		ul {
+			margin: 0.5rem 0 2rem;
+		}
+
+		form {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+
+			input[type="text"] {
+				margin: .25rem;
+			}
 		}
 	}
 </style>

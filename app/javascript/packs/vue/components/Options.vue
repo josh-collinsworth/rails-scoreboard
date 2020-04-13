@@ -26,6 +26,10 @@ export default {
 		refresh: {
 			type: Function,
 			required: true
+		},
+		alert: {
+			type: Function,
+			required: true
 		}
 	},
 	methods: {
@@ -45,6 +49,8 @@ export default {
 					.then(response => {
 						if (response.data.success) {
 							window.location.href = `/?deleted=true&name=${this.game.name}`
+						} else {
+							this.alert('Error: could not create new player')
 						}
 					})
 			}
@@ -67,6 +73,7 @@ export default {
 		top: 4rem;
 		transform: translateX(100%);
 		transition: transform .2s $easing;
+		color: $darkGray;
 
 		&.open {
 			transform: translateX(0);
