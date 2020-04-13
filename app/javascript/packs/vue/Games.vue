@@ -6,9 +6,10 @@
 			</div>
 
 			<div v-else key="isLoaded">
-				<h1>Resume a game in progress</h1>
-				<p>Or, <a href="/game/new">start a new game</a>!</p>
-				<hr>
+				<h1>Rails Scoreboard</h1>
+				<h2><a href="/game/new">Start a new game</a></h2>
+				<p class="or">OR</p>
+				<h2>Resume a game in progress:</h2>
 				<ul id="games-list">
 					<li v-for="game in gamesList" :key="game.created_at">
 						<a :href="`/game/${game.id}`">
@@ -49,6 +50,12 @@ export default {
 
 
 <style scoped lang="scss">
+	@import '../../../assets/stylesheets/vars';
+
+	.container {
+		text-align: center;
+	}
+
 	#games-list {
 		padding-left: 0;
 
@@ -67,6 +74,30 @@ export default {
 				font-style: italic;
 				margin-top: 0;
 			}
+
+		}
+	}
+
+	p.or {
+		font-style: italic;
+		color: $lightGray;
+		width: 100%;
+		text-align: center;
+		position: relative;
+
+		&:before, &:after {
+			content: '';
+			width: calc(50% - 1rem);
+			height: 0;
+			border-bottom: 1px solid $lightGray;
+			position: absolute;
+			left: 0;
+			top: calc(50% - 1px);
+		}
+
+		&:after {
+			left: unset;
+			right: 0;
 		}
 	}
 </style>
