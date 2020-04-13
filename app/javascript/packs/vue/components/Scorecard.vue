@@ -3,11 +3,14 @@
 		<h2>{{ player.name }}</h2>
 
 		<p class="score">
-			{{ player.score || 0 }}
+			<span class="prepend">{{ game.options.prepend }}</span>{{ player.score || 0 }}<span class="append">{{ game.options.append }}</span>
 		</p>
 		<div class="button-board half">
-			<button @click="incrementScore(false)">-{{ game.options.increment }}</button>
-			<button @click="incrementScore(true)">+{{ game.options.increment }}</button>
+			<button  v-if="showOnes" @click="incrementScore(-1)">-1</button>
+			<button  v-if="showOnes" @click="incrementScore(1)">+1</button>
+
+			<button @click="incrementScore(game.options.increment * -1)">-{{ game.options.increment }}</button>
+			<button @click="incrementScore(game.options.increment)">+{{ game.options.increment }}</button>
 		</div>
 	</article>
 </template>
@@ -32,11 +35,10 @@ export default {
 		}
 	},
 	methods: {
-		incrementScore(add) {
+		incrementScore(amount) {
 			let newScore = Number(this.player.score || 0)
-			const increment = Number(this.game.options.increment)
 
-			add ? newScore += increment : newScore -= increment
+			newScore += Number(amount)
 
 			const data = { new_score: newScore }
 			axios
@@ -49,6 +51,11 @@ export default {
 					}
 				})
 		}
+	},
+	computed: {
+		showOnes() {
+			return this.game.options.include_increment_by_one && this.game.options.increment != 1
+		}
 	}
 }
 </script>
@@ -59,24 +66,48 @@ export default {
 
 	.card {
 		padding: 1rem;
-		border-radius: .25rem;
+		border-radius: .5rem;
 		background: $white;
 		text-align: center;
+		border: 2px solid $darkGray;
 
 		h2 {
-			margin-top: 0;
+			margin: 0;
 		}
 
 		.score {
 			text-align: center;
 			font-size: 2.5rem;
 			font-weight: bold;
-			margin: 0;
+			margin: .5em auto;
+
+			.prepend,
+			.append {
+				font-size: .75em;
+				font-weight: normal;
+				color: $mediumGray;
+			}
 		}
 
 		.button-board {
 			display: grid;
 			grid-gap: 1rem;
+
+			button {
+				margin: 0;
+				/* background: $lightBlue; */
+				font-size: 1.25rem;
+				border-color: $darkGray;
+
+				&:hover {
+					box-shadow: none;
+					background: $yellow;
+				}
+
+				&:focus {
+					background: $yellow;
+				}
+			}
 
 			&.half {
 				grid-template-columns: 1fr 1fr;

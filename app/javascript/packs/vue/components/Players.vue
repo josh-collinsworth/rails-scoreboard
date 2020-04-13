@@ -104,6 +104,9 @@ export default {
 			axios
 				.post(`/api/participants/`, { name: this.newPlayerName })
 				.then(response => this.validatePlayerResponse(response, "Unable to create new player"))
+				.then(success => {
+					if (success) this.newPlayerName = ''
+				})
 		},
 		deletePlayer(playerID){
 			axios
@@ -113,8 +116,10 @@ export default {
 		validatePlayerResponse(response, error) {
 			if(response.data.success) {
 				this.getAllPlayers()
+				return true
 			} else {
 				this.alert(error)
+				return false
 			}
 		}
 	},
@@ -133,17 +138,6 @@ export default {
 	@import '../../../../assets/stylesheets/vars';
 
 	#players {
-		position: absolute;
-		width: 100%;
-		max-width: 24rem;
-		padding: 1rem;
-		min-height: calc(100vh - 100px);
-		background: $lightBlue;
-		color: $darkGray;
-		right: 0;
-		top: 4rem;
-		transform: translateX(100%);
-		transition: transform .2s $easing;
 
 		&.open {
 			transform: translateX(0);

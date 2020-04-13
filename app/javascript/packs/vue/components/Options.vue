@@ -1,13 +1,25 @@
 <template v-if="game">
-	<form id="options" :class="optionsMenuOpen && 'open'" :tabindex="optionsMenuOpen ? 0 : -1" :aria-hidden="!optionsMenuOpen">
+	<aside id="options" :class="optionsMenuOpen && 'open'" :tabindex="optionsMenuOpen ? 0 : -1" :aria-hidden="!optionsMenuOpen">
 		<div class="form-group">
 			<label for="increment">Scores increment by:</label>
-			<input type="number" id="increment" :value="game.options.increment" @change="updateIncrement">
+			<input type="number" id="increment" :value="game.options.increment" @change="updateIncrement" step="1">
+		</div>
+		<div class="form-group tight">
+			<input type="checkbox" :disabled="game.options.increment == 1" :checked="game.options.include_increment_by_one" @change="updateIncludeByOneBtns" id="also-include-one">
+			<label for="also-include-one">Also include +1/-1 buttons</label>
+		</div>
+		<div class="form-group">
+			<label for="prepend">Prepend scores with:</label>
+			<input type="text" id="prepend" :value="game.options.prepend" @change="updatePrepend" maxlength="3" placeholder="e.g., '$'">
+		</div>
+		<div class="form-group">
+			<label for="append">Append scores with:</label>
+			<input type="text" id="append" :value="game.options.append" @change="updateAppend" maxlength="3" placeholder="e.g., '.00'">
 		</div>
 
 		<button @click="deleteThisGame">Delete this game</button>
 
-	</form>
+	</aside>
 </template>
 
 <script>
@@ -33,15 +45,45 @@ export default {
 		}
 	},
 	methods: {
-		updateIncrement (e) {
+		updateIncrement(e) {
 			let updatedGame = this.game
 			updatedGame.options.increment = e.target.value
 			const data = {
 				game: updatedGame
 			}
+			this.sendUpdate(data);
+		},
+		updateIncludeByOneBtns(e) {
+			const checked = e.target.checked
+			let updatedGame = this.game
+			updatedGame.options.include_increment_by_one = checked
+			const data = {
+				game: updatedGame
+			}
+			this.sendUpdate(data);
+		},
+		updatePrepend(e) {
+			const prependWith = e.target.value
+			let updatedGame = this.game
+			updatedGame.options.prepend = prependWith
+			const data = {
+				game: updatedGame
+			}
+			this.sendUpdate(data);
+		},
+		updateAppend(e) {
+			const appendWith = e.target.value
+			let updatedGame = this.game
+			updatedGame.options.append = appendWith
+			const data = {
+				game: updatedGame
+			}
+			this.sendUpdate(data);
+		},
+		sendUpdate(data) {
 			axios.put(`/api/games/${this.game.id}`, data)
 		},
-		deleteThisGame (e) {
+		deleteThisGame(e) {
 			e.preventDefault();
 			const confirmation = confirm(`Are you sure you want to delete the game ${this.game.name}?`)
 			if(confirmation) {
@@ -63,20 +105,21 @@ export default {
 	@import '../../../../assets/stylesheets/vars';
 
 	#options {
-		position: absolute;
-		width: 100%;
-		max-width: 24rem;
-		padding: 1rem;
-		min-height: calc(100vh - 100px);
-		background: $lightBlue;
-		right: 0;
-		top: 4rem;
-		transform: translateX(100%);
-		transition: transform .2s $easing;
-		color: $darkGray;
 
 		&.open {
 			transform: translateX(0);
+		}
+
+		.form-group {
+			margin: 1rem;
+		}
+
+		input[type=text],
+		input[type=number] {
+			background: transparent;
+			border: none;
+			border-bottom: 2px solid $darkGray;
+			border-radius: 0;
 		}
 	}
 </style>

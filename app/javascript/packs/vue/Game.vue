@@ -78,6 +78,8 @@ export default {
     grid-gap: 1rem;
     background: $lightBlue;
     min-height: 100vh;
+    align-items: start;
+    align-content: start;
 
     h1 {
       grid-column: 1 / -1;

@@ -63,7 +63,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		background: $darkBlue;
+		background: rgba($darkBlue, 0.95);
 		color: $white;
 		padding: .75rem;
 		height: 4rem;
@@ -71,6 +71,8 @@ export default {
 		top: 0;
 		left: 0;
 		width: 100%;
+		z-index: 3;
+		box-shadow: $shadow;
 
 		h1 {
 			margin: 0;

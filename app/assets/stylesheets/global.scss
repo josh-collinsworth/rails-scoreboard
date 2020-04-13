@@ -56,6 +56,10 @@ a {
 			width: 100%;
 		}
 	}
+
+	&.tight {
+		justify-content: flex-start;
+	}
 }
 
 input {
@@ -95,7 +99,46 @@ button, input[type=submit] {
 	}
 }
 
+input[type=checkbox] {
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	position: absolute;
+	left: -100vw;
+	border: none;
+	background: transparent;
+	outline: none;
+	box-shadow: none;
+
+	& + label::before {
+		content: '⬜';
+		margin-right: .5rem;
+		font-style: normal;
+	}
+
+	&:checked + label::before {
+		content: '✅'
+	}
+
+	&:disabled,
+	&:disabled + label {
+		filter: opacity(0.5) grayscale(100%);
+	}
+}
+
 aside {
+	background: $lightBlue;
+	box-shadow: $shadow;
+	position: absolute;
+	width: 100%;
+	max-width: 24rem;
+	padding: 1rem;
+	min-height: calc(100vh - 4rem);
+	color: $darkGray;
+	right: 0;
+	top: 4rem;
+	transform: translateX(100%);
+	transition: transform .2s $easing;
 
 	ul {
 		padding: 0;

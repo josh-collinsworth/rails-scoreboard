@@ -1,6 +1,6 @@
 class Api::GameParticipantsController < ApiController
 	def index
-		render json: GameParticipant.all
+		render json: GameParticipant.order(name: :asc).all
 	end
 
 	def create
@@ -13,15 +13,11 @@ class Api::GameParticipantsController < ApiController
 			if @new_game_participant.save
 				render json: { success: true }
 			else
-				display_add_participant_error
+				render json: { error: true }
 			end
 		else
-			display_add_participant_error
+			render json: { error: true }
 		end
-	end
-
-	def display_add_participant_error
-		render json: { error: true }
 	end
 
 	def destroy

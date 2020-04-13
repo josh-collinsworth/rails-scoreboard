@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2020_04_12_011628) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.json "options", default: {"increment"=>1}
+    t.json "options", default: {"increment"=>1, "include_increment_by_one"=>false, "call_players"=>true, "prepend"=>"", "append"=>"", "add_reset"=>false, "add_double"=>false, "add_halve"=>false}
     t.index ["name"], name: "index_games_on_name"
   end
 

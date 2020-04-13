@@ -1,7 +1,7 @@
 class Api::ParticipantsController < ApiController
 
 	def index
-		render json: Participant.all
+		render json: Participant.all.order(name: :asc)
 	end
 
 	def create

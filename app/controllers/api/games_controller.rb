@@ -5,7 +5,7 @@ class Api::GamesController < ApiController
 
 	def show
 		if params[:participants]
-			render json: Game.find(params[:id]).participants
+			render json: Game.find(params[:id]).participants.order(name: :asc)
 		else
 			render json: Game.find(params[:id])
 		end

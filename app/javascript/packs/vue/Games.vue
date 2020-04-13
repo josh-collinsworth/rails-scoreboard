@@ -8,13 +8,13 @@
 			<div v-else key="isLoaded">
 				<h1>Resume a game in progress</h1>
 				<p>Or, <a href="/game/new">start a new game</a>!</p>
+				<hr>
 				<ul id="games-list">
 					<li v-for="game in gamesList" :key="game.created_at">
 						<a :href="`/game/${game.id}`">
 							<h2>{{ game.name }}</h2>
 						</a>
 						<p class="details">Last played: {{ parseDate(game.updated_at) }}</p>
-						<p><small>{{game.options.increment}}</small></p>
 					</li>
 				</ul>
 			</div>
