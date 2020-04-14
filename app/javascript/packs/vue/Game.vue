@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <transition name="fade">
-      <div v-if="loading">
-        <Loader />
-      </div>
+      <Loader v-if="loading" />
       <div v-else>
         <Header
           :game="game"
