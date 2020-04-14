@@ -1,6 +1,7 @@
 <template>
 	<aside v-if="game" id="players" :class="playerMenuOpen && 'open'" :tabindex="playerMenuOpen ? 0 : -1" :aria-hidden="!playerMenuOpen">
 		<h2>Players in Game:</h2>
+		<p v-if="!players.length">(Create players and add them to the game below)</p>
 		<ul>
 			<li v-for="player in players" :key="player.id">
 				{{ player.name }}: {{ player.score || 0 }}
@@ -99,18 +100,21 @@ export default {
 			e.preventDefault();
 			axios
 				.post(`/api/participants/`, { name: this.newPlayerName })
-				.then(response => this.validatePlayerResponse(response, "Unable to create new player"))
+				.then(response => this.validatePlayerResponse(response, "Unable to create new player", "Successfully created new player"))
 				.then(success => {
 					if (success) this.newPlayerName = ''
 				})
 		},
 		deletePlayer(playerID){
+			const confirmation = confirm("Are you sure you want to delete this player? This action is irreversible, and the player will be removed from ALL games (not just this one)!")
 			axios
 				.delete(`/api/participants/${playerID}`)
-				.then(response => this.validatePlayerResponse(response, "Unable to delete player"))
+				.then(response => this.validatePlayerResponse(response, "Unable to delete player", "Successfully deleted player"))
+				.catch(error => this.alert(error))
 		},
-		validatePlayerResponse(response, error) {
+		validatePlayerResponse(response, error, success) {
 			if(response.data.success) {
+				this.alert(success)
 				this.getAllPlayers()
 				return true
 			} else {

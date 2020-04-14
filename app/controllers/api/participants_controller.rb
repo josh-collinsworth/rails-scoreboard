@@ -15,6 +15,10 @@ class Api::ParticipantsController < ApiController
 
 	def destroy
 		@participant = Participant.find(params[:id])
+		@games = GameParticipant.where(participant_id: @participant.id)
+		unless @games.each { |g| g.delete }
+			render json: { error: true }
+		end
 		if @participant.destroy
 			render json: { success: true }
 		else

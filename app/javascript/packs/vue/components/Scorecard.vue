@@ -15,8 +15,8 @@
 			<button v-if="game.options.add_halve" @click="incrementScore(player.score * -0.5)">÷2</button>
 			<button v-if="game.options.add_double" @click="incrementScore(player.score)">×2</button>
 		</div>
-		<div class="button-board reset">
-			<button v-if="game.options.add_reset" @click="incrementScore((player.score * -1), `Are you sure you want to reset ${player.name}'s score to zero?`)">Reset to 0</button>
+		<div class="button-board reset" v-if="game.options.add_reset">
+			<button @click="incrementScore((player.score * -1), `Are you sure you want to reset ${player.name}'s score to zero?`)">Reset to 0</button>
 		</div>
 	</article>
 </template>

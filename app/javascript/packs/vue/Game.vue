@@ -16,7 +16,7 @@
           @refresh="fetchGameData"
         />
         <main id="scoreboard" :class="maybeBlur" @click="closeMenus">
-          <h1>{{ game.name }} </h1>
+          <h1>{{ game.name }}</h1>
           <Scorecard
             v-for="player in players"
             :key="player.id"
@@ -78,6 +78,7 @@ export default {
           })
           this.players = players.data
           this.loading = false
+          if(!this.players.length) this.playerMenuOpen = true
         }))
         .catch(error => this.alert(error))
     },
