@@ -25,7 +25,9 @@
             @refresh="fetchGameData"
           />
         </main>
-        <Alert v-if="alerting" :message="alertMessage"/>
+        <transition name="fade">
+          <Alert v-if="alerting" :message="alertMessage" :class="notice && 'notice'"/>
+        </transition>
       </div>
     </transition>
   </div>
@@ -47,13 +49,14 @@ export default {
     id: null,
     alerting: false,
     alertMessage: '',
+    notice: false
   }),
   components: { Header, Loader, Alert, Scorecard },
   created() {
     this.id = window.location.href.match(/game\/(\d+)/).pop()
+    this.fetchGameData()
   },
   mounted() {
-    this.fetchGameData()
   },
   methods: {
     fetchGame() {
@@ -95,14 +98,17 @@ export default {
       this.playerMenuOpen = false
       this.optionsMenuOpen = false
     },
-    alert(message) {
+    alert(message, notice = false) {
       this.alerting = true
       this.alertMessage = message
+      this.notice = notice
 
-      setTimeout(() => {
+      clearTimeout(this.showAlert)
+
+      this.showAlert = setTimeout(() => {
         this.alerting = false
         this.alertMessage = ''
-      }, 11000)
+      }, 7000)
     }
   },
   computed: {

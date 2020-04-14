@@ -1,31 +1,31 @@
-<template v-if="game">
+<template>
 	<aside id="options" :class="optionsMenuOpen && 'open'" :tabindex="optionsMenuOpen ? 0 : -1" :aria-hidden="!optionsMenuOpen">
 		<div class="form-group">
-			<label for="increment">Scores increment by:</label>
+			<label for="increment">Scores <strong>increment</strong> by:</label>
 			<input type="number" id="increment" :value="game.options.increment" @change="updateIncrement" step="1">
 		</div>
 		<div class="form-group tight">
 			<input type="checkbox" :disabled="game.options.increment == 1" :checked="game.options.include_increment_by_one" @change="updateIncludeByOneBtns" id="also-include-one">
-			<label for="also-include-one">Also include +1/-1 buttons</label>
+			<label for="also-include-one">Also include <strong>+1/-1</strong> buttons</label>
 		</div>
 		<div class="form-group tight">
 			<input type="checkbox" :checked="game.options.add_double" @change="updateDouble" id="double">
-			<label for="double">Include button to double player score</label>
+			<label for="double">Include button to <strong>double</strong> player score</label>
 		</div>
 		<div class="form-group tight">
 			<input type="checkbox" :checked="game.options.add_halve" @change="updateHalve" id="halve">
-			<label for="halve">Include button to halve player score</label>
+			<label for="halve">Include button to <strong>halve</strong> player score</label>
 		</div>
 		<div class="form-group tight">
 			<input type="checkbox" :checked="game.options.add_reset" @change="updateReset" id="reset">
-			<label for="reset">Include button to reset player to zero</label>
+			<label for="reset">Include button to <strong>reset</strong> player to zero</label>
 		</div>
 		<div class="form-group">
-			<label for="prepend">Prepend scores with:</label>
+			<label for="prepend"><strong>Prepend</strong> scores with:</label>
 			<input type="text" id="prepend" :value="game.options.prepend" @change="updatePrepend" maxlength="3" placeholder="e.g., '$'">
 		</div>
 		<div class="form-group">
-			<label for="append">Append scores with:</label>
+			<label for="append"><strong>Append</strong> scores with:</label>
 			<input type="text" id="append" :value="game.options.append" @change="updateAppend" maxlength="3" placeholder="e.g., '.00'">
 		</div>
 

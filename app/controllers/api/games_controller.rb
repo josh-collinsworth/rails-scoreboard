@@ -34,8 +34,5 @@ class Api::GamesController < ApiController
 			redirect_to game_path(@game), alert: errors
 		end
 	end
-
-	def go_home
-	end
 end
 

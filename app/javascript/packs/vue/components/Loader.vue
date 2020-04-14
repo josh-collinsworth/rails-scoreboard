@@ -1,7 +1,9 @@
 <template>
 	<div id="loader">
 		<h1>
-			Loading
+			<span class="sr">
+				Loading
+			</span>
 			<span class="dot"></span>
 			<span class="dot"></span>
 			<span class="dot"></span>

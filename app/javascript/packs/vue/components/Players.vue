@@ -1,15 +1,20 @@
 <template>
-	<aside v-if="game" id="players" :class="playerMenuOpen && 'open'" :tabindex="playerMenuOpen ? 0 : -1" :aria-hidden="!playerMenuOpen">
+	<aside id="players" :class="playerMenuOpen && 'open'" :tabindex="playerMenuOpen ? 0 : -1" :aria-hidden="!playerMenuOpen">
 		<h2>Players in Game:</h2>
-		<p v-if="!players.length">(Create players and add them to the game below)</p>
+		<p v-if="!players.length">
+			<strong>None</strong>
+			<i>(Create players and add them below)</i>
+		</p>
 		<ul>
 			<li v-for="player in players" :key="player.id">
-				{{ player.name }}: {{ player.score || 0 }}
+				<span>
+					{{ player.name }}:&ensp;<b>{{ player.score || 0 }}</b>
+				</span>
 				<button @click="removePlayerFromGame(player.id)">Remove from game</button>
 			</li>
 		</ul>
 
-		<h2>Other Players:</h2>
+		<h2>Available Players:</h2>
 		<ul>
 			<li v-for="player in getRemainingPlayers" :key="player.id">
 				{{ player.name }}
@@ -61,8 +66,10 @@ export default {
 			required: true
 		}
 	},
-	mounted() {
+	created() {
 		this.getAllPlayers()
+	},
+	mounted() {
 	},
 	methods: {
 		getAllPlayers() {
@@ -106,15 +113,18 @@ export default {
 				})
 		},
 		deletePlayer(playerID){
-			const confirmation = confirm("Are you sure you want to delete this player? This action is irreversible, and the player will be removed from ALL games (not just this one)!")
-			axios
-				.delete(`/api/participants/${playerID}`)
-				.then(response => this.validatePlayerResponse(response, "Unable to delete player", "Successfully deleted player"))
-				.catch(error => this.alert(error))
+			const confirmation = confirm("Are you sure you want to delete this player?\n\nThis action is irreversible, and the player will be removed from ALL games (not just this one)!")
+
+			if(confirmation) {
+				axios
+					.delete(`/api/participants/${playerID}`)
+					.then(response => this.validatePlayerResponse(response, "Unable to delete player", "Successfully deleted player"))
+					.catch(error => this.alert(error))
+			}
 		},
 		validatePlayerResponse(response, error, success) {
 			if(response.data.success) {
-				this.alert(success)
+				this.alert(success, true)
 				this.getAllPlayers()
 				return true
 			} else {
@@ -145,10 +155,25 @@ export default {
 
 		h2 {
 			margin: 0;
+			font-size: 1.25rem;
 		}
 
 		ul {
 			margin: 0.5rem 0 2rem;
+
+			li {
+				font-style: italic;
+				font-weight: normal;
+
+				b {
+					font-weight: bold;
+					font-style: normal;
+				}
+
+				button:last-of-type {
+					margin-right: 0;
+				}
+			}
 		}
 
 		form {

@@ -1,5 +1,5 @@
 <template>
-	<header v-if="game">
+	<header>
 		<a href="/">◀️ Back to Game list</a>
 		<div>
 			<button @click="togglePlayerMenu">Players</button>

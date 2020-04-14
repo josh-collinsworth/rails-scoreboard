@@ -7,15 +7,15 @@
 
 			<div v-else key="isLoaded">
 				<h1>Rails Scoreboard</h1>
-				<h2><a href="/game/new">Start a new game</a></h2>
+				<a class="btn" href="/game/new">Start a new game</a>
 				<p class="or">OR</p>
 				<h2>Resume a game in progress:</h2>
 				<ul id="games-list">
 					<li v-for="game in gamesList" :key="game.updated_at">
 						<a :href="`/game/${game.id}`">
-							<h2>{{ game.name }}</h2>
+							{{ game.name }}
 						</a>
-						<p class="details">Last played: {{ parseDate(game.updated_at) }}</p>
+						<span class="details">Last played: {{ parseDate(game.updated_at) }}</span>
 					</li>
 				</ul>
 				<h3 v-if="!gamesList.length">(No games found)</h3>
@@ -35,11 +35,13 @@ export default {
 		loading: true
 	}),
 	components: { Loader },
-	mounted() {
+	created() {
 		axios.get('/api/games').then(response => {
 			this.gamesList = response.data
 			setTimeout(() => { this.loading = false }, 200)
 		})
+	},
+	mounted() {
 	},
 	methods: {
 		parseDate(date) {
@@ -54,8 +56,22 @@ export default {
 <style scoped lang="scss">
 	@import '../../../assets/stylesheets/vars';
 
+	h1 {
+		margin: 0 0 .5em;
+		font-size: calc(2.6rem + 2vw);
+		line-height: 1;
+	}
+
+	h2 {
+		font-style: italic;
+	}
+
 	.container {
 		text-align: center;
+	}
+
+	.btn {
+		margin: 0 auto .5rem;
 	}
 
 	#games-list {
@@ -63,18 +79,24 @@ export default {
 
 		li {
 			list-style-type: none;
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			padding: .5rem 0;
+			border-bottom: 1px solid lighten($lightGray, 25%);
 
 			a {
 				margin: 0;
+				font-weight: bold;
+				font-size: 1.125rem;
 			}
 
-			h2 {
-				margin-bottom: 0;
-			}
-
-			p.details {
+			.details {
 				font-style: italic;
-				margin-top: 0;
+				font-weight: normal;
+				margin: 0;
+				font-size: .875rem;
+				color: $mediumGray;
 			}
 		}
 	}
