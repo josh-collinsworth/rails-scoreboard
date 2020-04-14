@@ -1,6 +1,10 @@
 class Api::GameParticipantsController < ApiController
 	def index
-		render json: GameParticipant.order(name: :asc).all
+		render json: GameParticipant.all
+	end
+
+	def show
+		render json: GameParticipant.where(game_id: params[:id])
 	end
 
 	def create
@@ -15,6 +19,15 @@ class Api::GameParticipantsController < ApiController
 			else
 				render json: { error: true }
 			end
+		else
+			render json: { error: true }
+		end
+	end
+
+	def update
+		@game = GameParticipant.find_by(game_id: params[:id], participant_id: params[:player])
+		if @game.update(score: params[:new_score])
+			render json: { success: true }
 		else
 			render json: { error: true }
 		end

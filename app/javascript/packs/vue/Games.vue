@@ -11,13 +11,14 @@
 				<p class="or">OR</p>
 				<h2>Resume a game in progress:</h2>
 				<ul id="games-list">
-					<li v-for="game in gamesList" :key="game.created_at">
+					<li v-for="game in gamesList" :key="game.updated_at">
 						<a :href="`/game/${game.id}`">
 							<h2>{{ game.name }}</h2>
 						</a>
 						<p class="details">Last played: {{ parseDate(game.updated_at) }}</p>
 					</li>
 				</ul>
+				<h3 v-if="!gamesList.length">(No games found)</h3>
 			</div>
 		</transition>
 	</div>
@@ -42,7 +43,8 @@ export default {
 	},
 	methods: {
 		parseDate(date) {
-			return new Date(date).toString().split('GMT')[0]
+			const jsDate = new Date(date)
+			return `${jsDate.toLocaleDateString()} at ${jsDate.toLocaleTimeString()}`
 		}
 	}
 }
@@ -74,7 +76,6 @@ export default {
 				font-style: italic;
 				margin-top: 0;
 			}
-
 		}
 	}
 

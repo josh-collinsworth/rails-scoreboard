@@ -1,6 +1,6 @@
 class Api::GamesController < ApiController
 	def index
-		render json: Game.order(created_at: :desc).all
+		render json: Game.order(updated_at: :desc).all
 	end
 
 	def show

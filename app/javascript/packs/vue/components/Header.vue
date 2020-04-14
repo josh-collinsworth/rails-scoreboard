@@ -1,12 +1,12 @@
 <template>
 	<header v-if="game">
-		<a href="/">Back to Game list</a>
+		<a href="/">◀️ Back to Game list</a>
 		<div>
 			<button @click="togglePlayerMenu">Players</button>
 			<button @click="toggleOptionsMenu">Game Options</button>
 		</div>
-		<Players :player-menu-open="playerMenuOpen" :game="game" :refresh="refresh" :alert="alert" :players="players" />
-		<Options :options-menu-open="optionsMenuOpen" :game="game" :refresh="refresh" :alert="alert" />
+		<Players :player-menu-open="playerMenuOpen" :game="game" @refresh="refresh" :alert="alert" :players="players" />
+		<Options :options-menu-open="optionsMenuOpen" :game="game" :alert="alert" />
 	</header>
 </template>
 
@@ -17,20 +17,12 @@ import Players from './Players'
 
 export default {
 	name: 'Header',
-	data: () => ({
-		optionsMenuOpen: false,
-		playerMenuOpen: false
-	}),
 	components: {
 		Options, Players
 	},
 	props: {
 		game: {
 			type: Object,
-			required: true
-		},
-		refresh: {
-			type: Function,
 			required: true
 		},
 		players: {
@@ -40,16 +32,25 @@ export default {
 		alert: {
 			type: Function,
 			required: true
+		},
+		optionsMenuOpen: {
+			type: Boolean,
+			required: true
+		},
+		playerMenuOpen: {
+			type: Boolean,
+			required: true
 		}
 	},
 	methods: {
 		toggleOptionsMenu () {
-			this.playerMenuOpen = false
-			this.optionsMenuOpen = !this.optionsMenuOpen
+			this.$emit('toggleOptionsMenu')
 		},
 		togglePlayerMenu () {
-			this.playerMenuOpen = !this.playerMenuOpen
-			this.optionsMenuOpen = false
+			this.$emit('togglePlayerMenu')
+		},
+		refresh() {
+			this.$emit('refresh')
 		}
 	}
 }
@@ -71,8 +72,7 @@ export default {
 		top: 0;
 		left: 0;
 		width: 100%;
-		z-index: 3;
-		box-shadow: $shadow;
+		z-index: 2;
 
 		h1 {
 			margin: 0;
@@ -90,7 +90,7 @@ export default {
 		}
 
 		a {
-			color: $lightBlue;
+			color: $white;
 		}
 	}
 </style>

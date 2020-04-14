@@ -5,15 +5,29 @@
         <Loader />
       </div>
       <div v-else>
-        <Header :game="game" :refresh="fetchGameData" :players="players" :alert="alert"/>
-         <main id="scoreboard">
+        <Header
+          :game="game"
+          :players="players"
+          :alert="alert"
+          :options-menu-open="optionsMenuOpen"
+          :player-menu-open="playerMenuOpen"
+          @togglePlayerMenu="togglePlayerMenu"
+          @toggleOptionsMenu="toggleOptionsMenu"
+          @refresh="fetchGameData"
+        />
+        <main id="scoreboard" :class="maybeBlur" @click="closeMenus">
           <h1>{{ game.name }} </h1>
-           <Scorecard v-for="player in players" :key="player.id" :player="player" :game="game" :refresh="fetchGameData" />
-         </main>
-         <Alert v-if="alerting" :message="alertMessage"/>
+          <Scorecard
+            v-for="player in players"
+            :key="player.id"
+            :player="player"
+            :game="game"
+            @refresh="fetchGameData"
+          />
+        </main>
+        <Alert v-if="alerting" :message="alertMessage"/>
       </div>
     </transition>
-
   </div>
 </template>
 
@@ -27,10 +41,12 @@ import axios from 'axios'
 export default {
   data: () => ({
     loading: true,
+    optionsMenuOpen: false,
+		playerMenuOpen: false,
     game: {},
     id: null,
     alerting: false,
-    alertMessage: ''
+    alertMessage: '',
   }),
   components: { Header, Loader, Alert, Scorecard },
   created() {
@@ -43,17 +59,40 @@ export default {
     fetchGame() {
       return axios.get(`/api/games/${this.id}`)
     },
-    fetchParticipants() {
+    fetchPlayers() {
       return axios.get(`/api/games/${this.id}?participants=true`)
+    },
+    fetchPlayerScores() {
+      return axios.get(`/api/game_participants/${this.id}`)
     },
     fetchGameData() {
       axios
-        .all([this.fetchGame(), this.fetchParticipants()])
-        .then(axios.spread((game, players) => {
+        .all([this.fetchGame(), this.fetchPlayers(), this.fetchPlayerScores()])
+        .then(axios.spread((game, players, scores) => {
           this.game = game.data
+
+          players.data.forEach(player => {
+            scores.data.forEach(score => {
+              if (player.id == score.participant_id) player.score = score.score
+            })
+          })
           this.players = players.data
           this.loading = false
         }))
+        .catch(error => this.alert(error))
+    },
+    toggleOptionsMenu() {
+			this.playerMenuOpen = false
+			this.optionsMenuOpen = !this.optionsMenuOpen
+		},
+		togglePlayerMenu() {
+			this.optionsMenuOpen = false
+			this.playerMenuOpen = !this.playerMenuOpen
+    },
+    closeMenus() {
+      if (!this.playerMenuOpen && !this.optionsMenuOpen) return
+      this.playerMenuOpen = false
+      this.optionsMenuOpen = false
     },
     alert(message) {
       this.alerting = true
@@ -64,6 +103,11 @@ export default {
         this.alertMessage = ''
       }, 11000)
     }
+  },
+  computed: {
+    maybeBlur() {
+      return (this.playerMenuOpen || this.optionsMenuOpen) && 'blurred'
+    }
   }
 }
 </script>
@@ -71,15 +115,24 @@ export default {
 <style scoped lang="scss">
   @import '../../../assets/stylesheets/vars';
 
+  #app {
+    background: $darkGray;
+  }
+
   #scoreboard {
     padding: calc(1rem + 100px) 2rem 2rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem,  1fr));
+    grid-template-columns: repeat(auto-fit, minmax(calc(10rem + 6vw),  1fr));
     grid-gap: 1rem;
     background: $lightBlue;
     min-height: 100vh;
     align-items: start;
     align-content: start;
+    transition: all .2s $easing;
+
+    &.blurred {
+      opacity: 0.25;
+    }
 
     h1 {
       grid-column: 1 / -1;

@@ -3,7 +3,7 @@
 		<h2>Players in Game:</h2>
 		<ul>
 			<li v-for="player in players" :key="player.id">
-				{{ player.name }} - {{ player.score || 0 }}
+				{{ player.name }}: {{ player.score || 0 }}
 				<button @click="removePlayerFromGame(player.id)">Remove from game</button>
 			</li>
 		</ul>
@@ -23,7 +23,7 @@
 			<li>
 				<form @submit="createNewPlayer">
 					<div class="form-group">
-						<label for="new-player">New player:</label>
+						<label for="new-player">Create new player:</label>
 						<input id="new-player" v-model="newPlayerName" type="text" />
 						<button type="submit">Add</button>
 					</div>
@@ -49,10 +49,6 @@ export default {
 		},
 		game: {
 			type: Object,
-			required: true
-		},
-		refresh: {
-			type: Function,
 			required: true
 		},
 		players: {
@@ -82,7 +78,7 @@ export default {
 				.post(`/api/game_participants`, data)
 				.then(response => {
 					if (response.data.success) {
-						this.refresh()
+						this.$emit('refresh')
 					} else {
 						this.alert('Error: could not add player to game')
 					}
@@ -93,7 +89,7 @@ export default {
 				.delete(`/api/game_participants/${this.game.id}?player_id=${playerID}`)
 				.then(response => {
 										if (response.data.success) {
-						this.refresh()
+						this.$emit('refresh')
 					} else {
 						this.alert('Error: could not remove player')
 					}

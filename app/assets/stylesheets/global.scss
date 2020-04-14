@@ -23,6 +23,11 @@ body {
 	color: $darkGray;
 }
 
+h1 {
+	font-size: 3rem;
+	font-style: italic;
+}
+
 a {
 	color: $darkBlue;
 	transition: all .2s $easing;
@@ -45,6 +50,7 @@ a {
 }
 
 .form-group {
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -97,6 +103,13 @@ button, input[type=submit] {
 		color: $darkGray;
 		border-color: $yellow;
 	}
+
+	&:disabled,
+	&:disabled:hover {
+		background: $lightGray !important;
+		color: $mediumGray !important;
+		border-color: $mediumGray !important;
+	}
 }
 
 input[type=checkbox] {
@@ -128,7 +141,6 @@ input[type=checkbox] {
 
 aside {
 	background: $lightBlue;
-	box-shadow: $shadow;
 	position: absolute;
 	width: 100%;
 	max-width: 24rem;
@@ -139,6 +151,7 @@ aside {
 	top: 4rem;
 	transform: translateX(100%);
 	transition: transform .2s $easing;
+	border-left: 2px solid $darkBlue;
 
 	ul {
 		padding: 0;
@@ -173,19 +186,20 @@ aside {
 			}
 		}
 	}
+
+	input[type=text],
+	input[type=number] {
+		background: transparent;
+		border: none;
+		border-bottom: 1px solid $darkGray;
+		border-radius: 0;
+		font-weight: bold;
+		padding: 0 0 .125rem;
+	}
 }
 
 label {
-	font-weight: bold;
 	font-style: italic
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
 }
 
 .alert, .notice {
@@ -220,4 +234,12 @@ label {
 		opacity: 0;
 		display: none;
 	}
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }

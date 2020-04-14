@@ -8,6 +8,18 @@
 			<input type="checkbox" :disabled="game.options.increment == 1" :checked="game.options.include_increment_by_one" @change="updateIncludeByOneBtns" id="also-include-one">
 			<label for="also-include-one">Also include +1/-1 buttons</label>
 		</div>
+		<div class="form-group tight">
+			<input type="checkbox" :checked="game.options.add_double" @change="updateDouble" id="double">
+			<label for="double">Include button to double player score</label>
+		</div>
+		<div class="form-group tight">
+			<input type="checkbox" :checked="game.options.add_halve" @change="updateHalve" id="halve">
+			<label for="halve">Include button to halve player score</label>
+		</div>
+		<div class="form-group tight">
+			<input type="checkbox" :checked="game.options.add_reset" @change="updateReset" id="reset">
+			<label for="reset">Include button to reset player to zero</label>
+		</div>
 		<div class="form-group">
 			<label for="prepend">Prepend scores with:</label>
 			<input type="text" id="prepend" :value="game.options.prepend" @change="updatePrepend" maxlength="3" placeholder="e.g., '$'">
@@ -35,10 +47,6 @@ export default {
 			type: Object,
 			required: true
 		},
-		refresh: {
-			type: Function,
-			required: true
-		},
 		alert: {
 			type: Function,
 			required: true
@@ -46,39 +54,41 @@ export default {
 	},
 	methods: {
 		updateIncrement(e) {
-			let updatedGame = this.game
-			updatedGame.options.increment = e.target.value
-			const data = {
-				game: updatedGame
-			}
-			this.sendUpdate(data);
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.increment = e.target.value
+			this.sendUpdate(updatedGame);
 		},
 		updateIncludeByOneBtns(e) {
-			const checked = e.target.checked
-			let updatedGame = this.game
-			updatedGame.options.include_increment_by_one = checked
-			const data = {
-				game: updatedGame
-			}
-			this.sendUpdate(data);
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.include_increment_by_one = e.target.checked
+			this.sendUpdate(updatedGame);
+		},
+		updateDouble(e) {
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.add_double = e.target.checked
+			this.sendUpdate(updatedGame);
+		},
+		updateHalve(e) {
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.add_halve = e.target.checked
+			this.sendUpdate(updatedGame);
+		},
+		updateReset(e) {
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.add_reset = e.target.checked
+			this.sendUpdate(updatedGame);
 		},
 		updatePrepend(e) {
 			const prependWith = e.target.value
-			let updatedGame = this.game
-			updatedGame.options.prepend = prependWith
-			const data = {
-				game: updatedGame
-			}
-			this.sendUpdate(data);
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.prepend = prependWith
+			this.sendUpdate(updatedGame);
 		},
 		updateAppend(e) {
 			const appendWith = e.target.value
-			let updatedGame = this.game
-			updatedGame.options.append = appendWith
-			const data = {
-				game: updatedGame
-			}
-			this.sendUpdate(data);
+			let updatedGame = { game: { ...this.game } }
+			updatedGame.game.options.append = appendWith
+			this.sendUpdate(updatedGame);
 		},
 		sendUpdate(data) {
 			axios.put(`/api/games/${this.game.id}`, data)
@@ -111,15 +121,17 @@ export default {
 		}
 
 		.form-group {
-			margin: 1rem;
+			margin: 1rem 0;
+
+			label,
+			input {
+				flex: 1 1 auto;
+			}
 		}
 
 		input[type=text],
 		input[type=number] {
-			background: transparent;
-			border: none;
-			border-bottom: 2px solid $darkGray;
-			border-radius: 0;
+			max-width: 6em;
 		}
 	}
 </style>
